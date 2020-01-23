@@ -1,0 +1,50 @@
+version: '3.7'
+services:
+  odoo-dev:
+    image: docker.io/freshoo/ubuntu-odoo-dev:13.0
+    # build:
+    #   context: ./build
+    #   dockerfile: Dockerfile
+    #   args:
+    #     USERNAME: ubuntu
+    #     USER_UID: 1000
+    #     USER_GID: 1000
+    #     ODOO_VERSION: 13.0
+    #     ADDITIONAL_VERSION: 13.0
+    #     ODOO_SOURCE: mount
+    #     ODOO_DB_HOST: db
+    #     ODOO_DB_PORT: 5432
+    #     ODOO_DB_USER: odoo
+    #     ODOO_DB_PASSWORD: odoo
+    #     IMAGE: freshoo/ubuntu-odoo-base:18.04
+    depends_on:
+      - db
+    ports:
+      - "8069:8069"
+    volumes:
+      - odoo-dev-data:/var/lib/odoo
+      - odoo-dev-config:/etc/odoo
+      - odoo-dev-addons:/mnt/extra-addons
+    # Overrides default command so things don't shut down after the process ends.
+    command: sleep infinity
+  db:
+    image: postgres:12
+    restart: unless-stopped
+    # ports:
+    #   - "5432:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - odoo-dev-db-data:/var/lib/postgresql/data
+volumes:
+  odoo-dev-data:
+    name: odoo-dev-data
+  odoo-dev-config:
+    name: odoo-dev-config
+  odoo-dev-addons:
+    name: odoo-dev-addons
+  odoo-dev-db-data:
+    name: odoo-dev-db-data

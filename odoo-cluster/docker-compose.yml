@@ -1,0 +1,49 @@
+version: '3.7'
+services:
+  web:
+    image: odoo:13.0
+    depends_on:
+      - db
+      - redis
+    ports:
+      - "8069:8069"
+    volumes:
+      - odoo-web-data:/var/lib/odoo
+      # - ../config:/etc/odoo
+      # - ../addons:/mnt/extra-addons
+    networks:
+      odoo-cluster:
+        ipv4_address: 172.20.0.2
+  redis:
+    image: redis:alpine
+    expose:
+      - "6379"
+    volumes:
+      - odoo-redis-data:/data
+      # - ./config/redis.conf:/usr/local/etc/redis/redis.conf
+    networks:
+      odoo-cluster:
+        ipv4_address: 172.20.0.3
+  db:
+    image: postgres:12
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - odoo-db-data:/var/lib/postgresql/data/pgdata
+    networks:
+      odoo-cluster:
+        ipv4_address: 172.20.0.4
+volumes:
+  odoo-web-data:
+  odoo-db-data:
+  odoo-redis-data:
+networks:
+  odoo-cluster:
+    driver: bridge
+    name: odoo-cluster
+    ipam:
+      config:
+        - subnet: 172.20.0.0/16

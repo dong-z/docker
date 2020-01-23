@@ -1,0 +1,49 @@
+version: '3.7'
+services:
+  odoo-env:
+    image: docker.io/freshoo/ubuntu-odoo-dev:local
+    # build:
+    #   context: ../ubuntu-odoo-dev/build
+    #   dockerfile: Dockerfile
+    #   args:
+    #     USERNAME: dong
+    #     USER_UID: 1000
+    #     USER_GID: 1000
+    #     ODOO_VERSION: 13.0
+    #     ADDITIONAL_VERSION: 12.0
+    #     ODOO_SOURCE: mount
+    #     ODOO_DB_HOST: common-postgres
+    #     ODOO_DB_PORT: 5432
+    #     ODOO_DB_USER: odoo
+    #     ODOO_DB_PASSWORD: odoo
+    #     IMAGE: freshoo/ubuntu-odoo-cn:18.04
+    container_name: odoo-env
+    hostname: odoo-env.docker.internal
+    ports:
+      - "8069:8069"
+    volumes:
+      - odoo-env-data:/var/lib/odoo
+      - odoo-env-config:/etc/odoo
+      - odoo-env-addons:/mnt/extra-addons
+      - ${HOME}/Work:/workspace/Work
+      - ${HOME}/Downloads:/workspace/Downloads
+      - ${HOME}/.ssh:/root/.ssh-localhost:ro
+    privileged: true
+    # Uncomment the next four lines if you will use a ptrace-based debuggers like C++, Go, and Rust.
+    # cap_add:
+    #   - SYS_PTRACE
+    # security_opt:
+    #   - seccomp:unconfined
+    # Overrides default command so things don't shut down after the process ends.
+    command: /bin/sh -c "while sleep 1000; do :; done"
+volumes:
+  odoo-env-data:
+    name: odoo-env-data
+  odoo-env-config:
+    name: odoo-env-config
+  odoo-env-addons:
+    name: odoo-env-addons
+networks:
+  default:
+    external: true
+    name: common-net

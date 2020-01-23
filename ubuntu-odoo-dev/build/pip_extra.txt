@@ -1,0 +1,18 @@
+tornado
+openpyxl
+bleach
+cryptography
+wechatpy
+itchat
+pycups
+phonenumbers
+oss2
+dnspython
+ipython
+watchdog
+inotify ; sys_platform == 'linux'
+pylint_odoo
+pep8
+black
+flake8
+yapf

@@ -1,0 +1,41 @@
+version: '3.7'
+services:
+  odoo-iotbox:
+    image: docker.io/freshoo/ubuntu-odoo-iotbox:13.0
+    build:
+      context: ./build
+      dockerfile: Dockerfile
+      args:
+        ODOO_VERSION: 13.0
+    container_name: odoo-iotbox
+    hostname: odoo-iotbox.docker.internal
+    depends_on:
+      - db
+    # command: --load=web,hw_proxy,hw_posbox_homepage,hw_posbox_upgrade,hw_escpos,hw_blackbox_be,hw_drivers
+    ports:
+      - 8070:8069
+      - 8072:8072
+    networks:
+      default:
+        ipv4_address: 172.18.0.10
+    # devices:
+    #   - "/dev/ttyUSB0:/dev/ttyUSB0"
+  db:
+    image: postgres:12
+    container_name: odoo-iotbox-db
+    hostname: odoo-iotbox-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - odoo-iotbox-db-data:/var/lib/postgresql/data
+volumes:
+  odoo-iotbox-db-data:
+    name: odoo-iotbox-db-data
+networks:
+  default:
+    external: true
+    name: common-net

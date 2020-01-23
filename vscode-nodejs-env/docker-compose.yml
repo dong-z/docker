@@ -1,0 +1,26 @@
+version: '3.7'
+services:
+  nodejs-env:
+    build:
+      context: ./build
+      dockerfile: Dockerfile
+      args:
+        USERNAME: dong
+        USER_UID: 1000
+        USER_GID: 1000
+        NODEJS_VERSION: 12
+    container_name: nodejs-env
+    hostname: nodejs-env.docker.internal
+    ports:
+      - "8080:80"
+      - "8081:8080"
+    volumes:
+      - ${HOME}/Work:/workspace/Work
+      - ${HOME}/Downloads:/workspace/Downloads
+      - ${HOME}/.ssh:/root/.ssh-localhost:ro
+    # Overrides default command so things don't shut down after the process ends.
+    command: /bin/sh -c "while sleep 1000; do :; done"
+networks:
+  default:
+    external: true
+    name: common-net

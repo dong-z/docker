@@ -1,0 +1,49 @@
+version: '3.7'
+services:
+  nginx:
+    image: nginx:stable-alpine
+    container_name: common-nginx
+    hostname: nginx.docker.internal
+    ports:
+      - "80:80"
+      - "443:443"
+    restart: unless-stopped
+    volumes:
+      - ./volumes/nginx/config/conf.d:/etc/nginx/conf.d
+      - ./volumes/nginx/config/services:/etc/nginx/services
+    # command: /bin/bash -c "envsubst < /etc/nginx/conf.d/mysite.template > /etc/nginx/conf.d/default.conf && exec nginx -g 'daemon off;'"
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: common-pgadmin
+    hostname: pgadmin.docker.internal
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${PGADMIN_DEFAULT_EMAIL:-admin}
+      PGADMIN_DEFAULT_PASSWORD: ${PGADMIN_DEFAULT_PASSWORD:-admin}
+    volumes:
+      - ./volumes/pgadmin/data:/var/lib/pgadmin
+      # - ./volumes/pgadmin/servers.json:/pgadmin4/servers.json
+      # - ./volumes/pgadmin/certificate.cert:/certs/server.cert
+      # - ./volumes/pgadmin/certificate.key:/certs/server.key
+  postgres:
+    image: postgres:12
+    restart: unless-stopped
+    container_name: common-postgres
+    hostname: postgres.docker.internal
+    ports: 
+      - "65432:5432"
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_USER=postgres
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - ./volumes/postgres:/var/lib/postgresql/data
+networks:
+  default:
+    name: common-net
+    ipam:
+      driver: default
+      config:
+        - subnet: 172.18.0.0/16

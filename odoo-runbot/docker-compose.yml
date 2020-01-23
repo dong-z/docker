@@ -1,0 +1,47 @@
+version: '3.7'
+services:
+  odoo-runbot:
+    # image: docker.io/freshoo/odoo-runbot:11.0
+    build:
+      context: ./build
+      dockerfile: Dockerfile
+    container_name: odoo-runbot
+    hostname: odoo-runbot.docker.internal
+    depends_on:
+      - db
+    ports:
+      - "8088:8080"
+      - "8099:8069"
+    volumes:
+      - odoo-runbot-data:/var/lib/odoo
+      - odoo-runbot-config:/etc/odoo
+      - odoo-runbot-addons:/mnt/extra-addons
+    environment:
+      - HOST=db
+      - USER=odoo
+      - PASSWORD=odoo
+  db:
+    image: postgres:12
+    container_name: odoo-runbot-db
+    hostname: odoo-runbot-db
+    restart: unless-stopped
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_PASSWORD=odoo
+      - POSTGRES_USER=odoo
+      - PGDATA=/var/lib/postgresql/data/pgdata
+    volumes:
+      - odoo-runbot-db-data:/var/lib/postgresql/data
+volumes:
+  odoo-runbot-data:
+    name: odoo-runbot-data
+  odoo-runbot-config:
+    name: odoo-runbot-config
+  odoo-runbot-addons:
+    name: odoo-runbot-addons
+  odoo-runbot-db-data:
+    name: odoo-runbot-db-data
+networks:
+  default:
+    external: true
+    name: common-net

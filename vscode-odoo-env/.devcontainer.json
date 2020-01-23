@@ -1,0 +1,108 @@
+// put this to you workspace root
+
+{
+	"name": "Ubuntu 18.04 & Odoo",
+	"dockerComposeFile": "./docker-compose.yml",
+	"service": "odoo-env",
+
+	// "image": "docker.io/freshoo/ubuntu-odoo-dev:local",
+	// "dockerFile": "../ubuntu-odoo-dev/Dockerfile",
+	// "workspaceMount": "src=${env:HOME}/Work,dst=/workspace/Work,type=bind,type=bind,consistency=cached",  // consistency=consistent/cached/delegated
+	// "runArgs": [
+	// 	"--privileged=true",
+	// 	"-v", "${env:HOME}/Downloads:/workspace/Downloads",
+	// 	"-v", "${env:HOME}/.ssh:/root/.ssh-localhost:ro"
+	// 	// If your application was built using C++, Go, or Rust, or another language that uses a ptrace-based debugger
+	// 	// "--cap-add=SYS_PTRACE", "--security-opt", "seccomp=unconfined",
+	// ],
+	// "appPort": ["8069:8069"],
+	"workspaceFolder": "/workspace/Work",
+	"postCreateCommand": "ln -s /workspace/Work ~ && ln -s /workspace/Downloads ~ && sudo cp -r /root/.ssh-localhost ~ && sudo chown -R $(id -u):$(id -g) ~/.ssh-localhost && mv ~/.ssh-localhost ~/.ssh && chmod 700 ~/.ssh && chmod 600 ~/.ssh/*",
+
+	"settings": {
+		"editor.formatOnSave": false,
+		"debug.console.fontSize": 11,
+		// "http.proxy": "http://host.docker.internal:1087",
+		"terminal.integrated.shell.linux": "/bin/bash",
+		"terminal.integrated.fontSize": 12,
+		"terminal.integrated.rendererType": "dom",
+		"workbench.tree.indent": 16,
+		// "workbench.tree.renderIndentGuides": "none",
+		"workbench.colorTheme": "Monokai",
+
+		// add this auto-save option so the pylint will sow errors while editing otherwise
+    	// it will only show the errors on file save
+    	"files.autoSave": "off",
+		"files.autoSaveDelay": 500,
+
+		// The following will hide the compiled file in the editor/ add other file to hide them from editor
+		"files.exclude": {
+			"**/*.pyc": true,
+			"**/__pycache__": true,
+			"**/.idea":true,
+			"**/.vscode":true,
+			".venv":true,
+			"ssh":true,
+			"remote-work":true
+		},
+
+		"python.venvPath": "~/.venv",
+    	// use this so the autocompleate/goto definition will work with python extension
+    	"python.autoComplete.extraPaths": [
+			"~/Work/odoo-13.0/addons",
+			"~/Work/odoo-13.0",
+			"~/Work/odoo-13.0/odoo/addons"
+		],
+
+		"python.linting.enabled": true,
+		"python.linting.lintOnSave": true,
+		"python.linting.maxNumberOfProblems": 100,
+		// linting pylint
+		"python.linting.pylintEnabled": true,
+		"python.linting.pylintArgs": [
+			"--load-plugins", "pylint_odoo",
+			"--init-hook", "import sys; sys.path.append('~/Work/odoo-13.0')",
+			// "--disable=C8202,E1608,W1627,E1601,E1603,E1602,E1605,E1604,E1607,E1606,W1621,W1620,W1623,W1622,W1625,W1624,W1609,W1608,W1607,W1606,W1605,W1604,W1603,W1602,W1601,W1639,W1640,I0021,W1638,I0020,W1618,W1619,W1630,W1626,W1637,W1634,W1635,W1610,W1611,W1612,W1613,W1614,W1615,W1616,W1617,W1632,W1633,W0704,W1628,W1629,W1636,C0111,E1002",
+			"--disable=all",
+			"--enable=F,E,unreachable,duplicate-key,unnecessary-semicolon,global-variable-not-assigned,unused-variable,binary-op-exception,bad-format-string,anomalous-backslash-in-string,bad-open-mode",
+			// OCA Pylint Odoo 待更新至13.0
+			// "--enable=C7902,C8101,C8102,C8103,C8104,C8105,C8106,C8107,C8108,C8109,C8110,C8111,C8201,C8202,E7901,E7902,E8101,E8102,E8103,F8101,R7980,R8101,R8110,W7901,W7902,W7903,W7904,W7905,W7906,W7907,W7908,W7909,W7910,W7930,W7935,W7936,W7937,W7938,W7939,W7940,W7942,W7943,W7944,W7950,W8101,W8102,W8103,W8104,W8105,W8106,W8110,W8111,W8112,W8113,W8114,W8115,W8116,W8201,W8202",
+			"--max-line-length=120"
+		],
+		// linting flake8
+		"python.linting.flake8Enabled": false,
+		"python.linting.flake8Args": [
+			"--ignore=E303",
+			"--max-line-length=120"
+		],
+
+		"python.formatting.provider": "yapf",
+		"odooScaffold.odooBinPath": "~/Work/odoo-13.0/odoo-bin",
+		"html.autoClosingTags": false,
+		"javascript.autoClosingTags": false,
+		"typescript.autoClosingTags": false,
+		"auto-close-tag.enableAutoCloseSelfClosingTag": true,
+		"auto-close-tag.SublimeText3Mode": true,
+		"remote.SSH.configFile": "~/Work/ssh/config",
+		"remote.extensionKind": {
+			"ms-azuretools.vscode-docker": "ui"
+		}
+	},
+	"extensions": [
+		"ms-ceintl.vscode-language-pack-zh-hans",  // 官方汉化语言包
+		"ms-python.python",  // 官方 Python
+		"msjsdiag.debugger-for-chrome",  // 官方 Chrome Debugger
+		"dbaeumer.vscode-eslint",  // ESLint
+		"davidanson.vscode-markdownlint",  // MD 语法高亮
+		"mechatroner.rainbow-csv",  // CSV 颜色间隔
+		"dotjoshjohnson.xml",  // XML 工具
+		"mstuttgart.odoo-scaffold",  // Odoo 模块脚手架
+		"jigar-patel.odoosnippets",  // Odoo 代码段
+		"mrorz.language-gettext",  // PO 语法高亮
+		"formulahendry.code-runner",  // Code Runner
+		"ckolkman.vscode-postgres",  // PG查询
+		"formulahendry.auto-close-tag",  // 自动关闭元素标签
+		"ms-azuretools.vscode-docker",  // Docker 管理
+		"ms-vscode-remote.vscode-remote-extensionpack"  // 远程开发包(Docker SSH)
+	]
+}

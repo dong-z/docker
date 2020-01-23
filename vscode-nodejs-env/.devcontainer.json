@@ -1,0 +1,61 @@
+{
+	"name": "Node.js 12",
+	"dockerComposeFile": "./docker-compose.yml",
+	"service": "nodejs-env",
+	"workspaceFolder": "/workspace/Work",
+	"postCreateCommand": "ln -s /workspace/Work ~ && ln -s /workspace/Downloads ~ && sudo cp -r /root/.ssh-localhost ~ && sudo chown -R $(id -u):$(id -g) ~/.ssh-localhost && mv ~/.ssh-localhost ~/.ssh && chmod 700 ~/.ssh && chmod 600 ~/.ssh/*",
+	"settings": {
+		"editor.formatOnSave": false,
+		"debug.console.fontSize": 11,
+		// "http.proxy": "http://host.docker.internal:1087",
+		"terminal.integrated.shell.linux": "/bin/bash",
+		"terminal.integrated.fontSize": 12,
+		"terminal.integrated.rendererType": "dom",
+		"workbench.tree.indent": 16,
+		// "workbench.tree.renderIndentGuides": "none",
+		"workbench.colorTheme": "Monokai",
+
+		// add this auto-save option so the pylint will sow errors while editing otherwise
+    	// it will only show the errors on file save
+    	"files.autoSave": "off",
+		"files.autoSaveDelay": 500,
+
+		// The following will hide the compiled file in the editor/ add other file to hide them from editor
+		"files.exclude": {
+			"**/*.pyc": true,
+			"**/__pycache__": true,
+			"**/.idea":true,
+			"**/.vscode":true,
+			".devcontainer.json":true,
+			".venv":true,
+			"ssh":true,
+			"remote-work":true,
+			"odoo12.code-workspace":true,
+			"odoo13.code-workspace":true
+		},
+		"html.autoClosingTags": false,
+		"javascript.autoClosingTags": false,
+		"typescript.autoClosingTags": false,
+		"auto-close-tag.enableAutoCloseSelfClosingTag": true,
+		"auto-close-tag.SublimeText3Mode": true,
+		"remote.SSH.configFile": "~/Work/ssh/config",
+		"remote.extensionKind": {
+			"ms-azuretools.vscode-docker": "ui"
+		}
+    },
+	"extensions": [
+		"ms-ceintl.vscode-language-pack-zh-hans",  // 官方汉化语言包
+		"dbaeumer.vscode-eslint",
+		"ms-vscode.vscode-typescript-tslint-plugin",
+		"msjsdiag.debugger-for-chrome",  // 官方 Chrome Debugger
+		"dbaeumer.vscode-eslint",  // ESLint
+		"davidanson.vscode-markdownlint",  // MD 语法高亮
+		"mechatroner.rainbow-csv",  // CSV 颜色间隔
+		"dotjoshjohnson.xml",  // XML 工具
+		"formulahendry.auto-close-tag",  // 自动关闭元素标签
+		"octref.vetur",  // VUE 插件
+		"qiu8310.minapp-vscode",  // 小程序
+		"ms-azuretools.vscode-docker",  // Docker 管理
+		"ms-vscode-remote.vscode-remote-extensionpack"  // 远程开发包(Docker SSH)
+	]
+}

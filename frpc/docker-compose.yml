@@ -1,0 +1,14 @@
+version: '3.7'
+services:
+  frpc:
+    image: docker.io/freshoo/frpc:local
+    build:
+      context: ./build
+      dockerfile: Dockerfile
+    container_name: frpc
+    restart: unless-stopped
+    network_mode: "host"
+    volumes:
+      - ./volumes/frpc/frpc.ini:/etc/frpc/frpc.ini
+      # Forwards the local Docker socket to the container.
+      - /var/run/docker.sock:/var/run/docker.sock
