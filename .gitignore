@@ -1,0 +1,21 @@
+# 忽略Mac的相关文件
+.DS_Store
+# 忽略开发工具配置文件
+.idea
+.idea/
+*.sublime-workspace
+*.sublime-project
+*.sublime-syntax
+*.sublime-settings
+.vscode
+.vscode/
+# compiled python files
+*.py[co]
+# emacs backup files
+*~
+# volumes files
+./volumes
+common-services/volumes/postgres
+common-services/volumes/pgadmin
+common-services/volumes/odoo
+common-services/volumes/runbot
