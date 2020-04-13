@@ -2,6 +2,7 @@ tornado
 openpyxl
 bleach
 cryptography
+pycryptodome
 wechatpy
 itchat
 pycups
