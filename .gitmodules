@@ -1,0 +1,3 @@
+[submodule "weblate"]
+	path = weblate
+	url = git@github.com:dong-z/oca-weblate-deployment.git
