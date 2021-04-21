@@ -13,7 +13,7 @@ ARG ODOO_DB_HOST=db
 ARG ODOO_DB_PORT=5432
 ARG ODOO_DB_USER=odoo
 ARG ODOO_DB_PASSWORD=odoo
-ARG IMAGE=freshoo/ubuntu-odoo-base:18.04
+ARG IMAGE=freshoo/ubuntu-odoo-base:20.04
 
 FROM ${IMAGE}
 LABEL maintainer="dong@freshoo.cn"

@@ -6,7 +6,7 @@ ARG USERNAME=ubuntu
 ARG USER_UID=1000
 ARG USER_GID=$USER_UID
 
-FROM ubuntu:bionic
+FROM ubuntu:focal
 LABEL maintainer="dong@freshoo.cn"
 
 # Avoid warnings by switching to noninteractive
@@ -42,12 +42,7 @@ RUN apt-get update \
     # [Optional] Add sudo support for the non-root user
     && apt-get install -y sudo \
     && echo $NON_ROOT_USERNAME ALL=\(root\) NOPASSWD:ALL > /etc/sudoers.d/$NON_ROOT_USERNAME \
-    && chmod 0440 /etc/sudoers.d/$NON_ROOT_USERNAME \
-    #
-    # Make python3 as default
-    && update-alternatives --install /usr/bin/python3 python3 /usr/bin/python3.6 1 \
-    && update-alternatives --install /usr/bin/python python /usr/bin/python3.6 1 \
-    && update-alternatives --install /usr/bin/pip pip /usr/bin/pip3 2
+    && chmod 0440 /etc/sudoers.d/$NON_ROOT_USERNAME
 
 # Install odoo apt dependencies
 RUN set -x; apt-get update \
@@ -76,7 +71,7 @@ RUN set -x; apt-get update \
 
 # Install latest postgresql-client
 RUN set -x; \
-        echo 'deb https://apt.postgresql.org/pub/repos/apt/ bionic-pgdg main' > /etc/apt/sources.list.d/pgdg.list \
+        echo 'deb https://apt.postgresql.org/pub/repos/apt/ focal-pgdg main' > /etc/apt/sources.list.d/pgdg.list \
         && export GNUPGHOME="$(mktemp -d)" \
         && repokey='B97B0AFCAA1A47F044F244A07FCC7D46ACCC4CF8' \
         && gpg --batch --keyserver keyserver.ubuntu.com --recv-keys "${repokey}" \
@@ -87,8 +82,8 @@ RUN set -x; \
         && apt-get install -y postgresql-client
 
 # Install wkhtmltopdf
-RUN curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/wkhtmltopdf/releases/download/0.12.5/wkhtmltox_0.12.5-1.bionic_amd64.deb \
-    && echo 'f1689a1b302ff102160f2693129f789410a1708a wkhtmltox.deb' | sha1sum -c - \
+RUN curl -o wkhtmltox.deb -sSL https://github.com/wkhtmltopdf/packaging/releases/download/0.12.6-1/wkhtmltox_0.12.6-1.focal_amd64.deb \
+    # && echo 'f1689a1b302ff102160f2693129f789410a1708a wkhtmltox.deb' | sha1sum -c - \
     && apt-get install -y --no-install-recommends ./wkhtmltox.deb \
     && rm -rf wkhtmltox.deb
 

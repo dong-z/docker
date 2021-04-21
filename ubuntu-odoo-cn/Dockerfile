@@ -1,4 +1,4 @@
-FROM freshoo/ubuntu-odoo-base:18.04
+FROM freshoo/ubuntu-odoo-base:20.04
 LABEL maintainer="dong@freshoo.cn"
 
 # Avoid warnings by switching to noninteractive
