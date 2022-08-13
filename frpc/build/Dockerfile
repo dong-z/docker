@@ -1,6 +1,6 @@
 ARG FRP_VERSION=0.30.0
 
-FROM alpine:3.10
+FROM alpine:latest
 LABEL maintainer="dong@freshoo.cn"
 
 ARG FRP_VERSION
